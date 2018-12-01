@@ -1,0 +1,26 @@
+!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="./css/photon.min.css">
+  <link rel="stylesheet" href="./css/application.css">
+</head>
+
+<body>
+  <div class="window">
+    <div class="window-content">
+      <div class="frameless-container">
+        <button class="btn btn-primary">Create a book</button>
+        <div class="bookshelf">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  require('../dist/renderer.js')
+  require('../dist/render-books.js')
+</script>
+</html>

@@ -1,0 +1,42 @@
+!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="./css/trix.css">
+  <link rel="stylesheet" href="./css/photon.min.css">
+  <link rel="stylesheet" href="./css/application.css">
+  <script src="./js/trix.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="window">
+      <div class="window-content">
+        <div class="pane-group">
+          <div class="pane-sm sidebar">
+            <div class="left-panel">
+
+            </div>
+          </div>
+          <div class="pane">
+            <div class="right-panel">
+              <div class="toolbar-section">
+                <button class="btn btn-large btn-positive">New Chapter</button>
+              </div>
+            </div>
+            <div class="editor">
+              <trix-editor placeholder='Type here'></trix-editor>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  require('./dist/renderer.js')
+</script>
+</html>
