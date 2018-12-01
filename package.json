@@ -13,7 +13,7 @@
   "author": "Tongfei Gao",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^2.0.2",
+    "electron": ">=2.0.8",
     "tslint": "^5.10.0",
     "typescript": "^2.8.3"
   }
