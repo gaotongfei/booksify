@@ -15,6 +15,8 @@ body {
 
 .frameless-container {
   padding-top: 30px;
+  height: 100%;
+  width: 100%;
 }
 .left-panel {
   padding-top: 30px;
@@ -22,10 +24,13 @@ body {
 }
 
 .right-panel {
-  padding: 30px;
+  height: 100%;
+}
+.buttons-bar {
+  padding: 30px 0 20px 10px;
 }
 
-.right-panel > .toolbar-section {
+.buttons-bar > .toolbar-section {
   height: 40px;
 }
 
@@ -51,12 +56,21 @@ trix-toolbar .trix-button-row {
 trix-editor {
   margin-top: 10px;
   border-style: none;
-  font-size: 16px;
+  font-size: 18px;
   font-family: Helvetica;
   height: 100%;
-  padding: 10px;
+  padding: 10px 10px 10px 30px;
 }
 
+.borderless-input {
+  outline: none;
+  border: none;
+}
+
+.borderless-input:focus {
+  border-color: none;
+  box-shadow: none;
+}
 trix-toolbar .trix-button {
   border-bottom: none;
 }
@@ -70,4 +84,43 @@ trix-toolbar .trix-button-group {
 
 trix-editor:empty:not(:focus)::before {
   color: #ccc;
+}
+
+.editor {
+  height: calc(79%);
+}
+::placeholder { /* Most modern browsers support this now. */
+  color: #ccc;
+}
+
+.bookshelf {
+  padding: 20px; 
+  height: 100%;
+  width: 100%;
+}
+.book-block {
+  height: 150px;
+  width: 100px;
+  background: #d7d7d7;
+  display: inline-block;
+}
+
+.empty-bookshelf {
+  font-size: 20px;
+}
+
+.feature-buttons {
+  height: 30px;
+  margin-top: 20px;
+}
+
+.feature-button {
+  float: right;
+  margin-right: 20px;
+}
+#chapter-input {
+  height: 45px;
+  font-size: 20px;
+  font-weight: 700;
+  padding-left: 30px;
 }

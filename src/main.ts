@@ -1,11 +1,6 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import * as path from "path";
-import * as os from 'os';
-import {Bookshelf} from './bookshelf'
-
-
 let mainWindow: Electron.BrowserWindow;
-let ipc: Electron.IpcMain;
 
 function createWindow() {
   // Create the browser window.
@@ -28,7 +23,6 @@ function createWindow() {
   mainWindow.webContents.on('did-finish-load', () => {
     mainWindow.webContents.send('render-books','This is a test');
   })
-
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
     // Dereference the window object, usually you would store windows
@@ -36,6 +30,14 @@ function createWindow() {
     // when you should delete the corresponding element.
     mainWindow = null;
   });
+
+  ipcMain.on('create-book', (event: any, arg: any) => {
+    mainWindow.loadFile(path.join(__dirname, '../src/editor.html'))
+  })
+
+  ipcMain.on('go-home', () => {
+    mainWindow.loadFile(path.join(__dirname, '../src/index.html'))
+  })
 }
 
 // This method will be called when Electron has finished

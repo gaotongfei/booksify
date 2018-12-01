@@ -12,7 +12,11 @@
   <div class="window">
     <div class="window-content">
       <div class="frameless-container">
-        <button class="btn btn-primary">Create a book</button>
+        <div class="feature-buttons">
+          <div class="feature-button">
+            <button class="btn btn-primary" id="create-book">Create a book</button>
+          </div>
+        </div>
         <div class="bookshelf">
         </div>
       </div>
@@ -21,6 +25,5 @@
 </body>
 <script>
   require('../dist/renderer.js')
-  require('../dist/render-books.js')
 </script>
 </html>

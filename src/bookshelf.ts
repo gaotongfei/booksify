@@ -1,6 +1,4 @@
-import * as fs from 'fs';
-
-import {Book} from './models/book'
+import {Book, BookModel} from './models/book'
 
 export class Bookshelf {
     selector: string
@@ -11,33 +9,29 @@ export class Bookshelf {
     }
 
     loadBooks() {
-        this.loadBooksPrep()
         let books = this.fetchBooks()
-        console.log(books)
         this.renderBooks(books)
-        console.log('loading book')
-        // this.renderBooks()
     }
 
     private fetchBooks(): Book[] {
-        let books: Book[] = []
-        fs.readdirSync(this.loadPath).forEach(file => {
-            let book: Book = new Book(file)
-            books.push(book)
-        })
+        let books = BookModel.listBooks();
         return books
     }
 
     private renderBooks(books: Book[]) {
         let element = document.querySelector(this.selector);
         element.innerHTML = this.template(books)
-        console.log(this.template(books))
     }
 
     private template(books: Book[]) {
         let temp = ""
         if (books.length == 0) {
-            temp = "<div class='empty-bookshelf'>No book found</div>"
+            temp = `
+            <div class='empty-bookshelf'>
+                <h1>Thanks for using Booksify</h1>
+                There is no book found on local machine.
+            </div>
+            `
             return temp
         }
         for (let book of books) {
@@ -47,11 +41,4 @@ export class Bookshelf {
         }
         return temp
     }
-
-    private loadBooksPrep() {
-        if (!fs.existsSync(this.loadPath)) {
-            fs.mkdirSync(this.loadPath)
-        }
-    }
-
 }
