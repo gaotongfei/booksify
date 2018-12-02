@@ -1,6 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from "electron";
 import * as path from "path";
 import { BookModel } from "./models/book";
+import * as fs from "fs";
 let mainWindow: Electron.BrowserWindow;
 let child: Electron.BrowserWindow;
 
@@ -34,12 +35,13 @@ function createWindow() {
 
   ipcMain.on('create-book', (event: any, arg: any) => {
     child = new BrowserWindow({
-      parent: mainWindow, 
+      parent: mainWindow,
       modal: true,
       show: false,
       width: 600,
       height: 750,
-      center: true })
+      center: true
+    })
     child.loadFile(path.join(__dirname, "../src/book-info.html"))
     child.once('ready-to-show', () => {
       child.show()
@@ -57,7 +59,16 @@ function createWindow() {
   })
 
   ipcMain.on('popup-file-dialog', (event: any, data: any) => {
-    dialog.showOpenDialog({properties: ['openFile', 'openDirectory', 'multiSelections']})
+    dialog.showOpenDialog({
+      properties: ['openFile', 'openDirectory'],
+      filters: [{ name: 'Images', extensions: ['jpg', 'png'] }]
+    }, (filePath, bookmark) => {
+      if (filePath && filePath.length > 0) {
+        let imgBase64 = fs.readFileSync(filePath[0]).toString('base64')
+        let imgSource = 'data:image/png;base64,' + imgBase64
+        child.webContents.send('book-cover-pic', imgSource);
+      }
+    })
   })
 
   ipcMain.on('go-home', () => {

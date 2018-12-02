@@ -14,6 +14,12 @@ confirmBtn.addEventListener('click', () => {
 
 
 let selectCoverPicBtn = document.getElementById('select-cover-pic')
-selectCoverPicBtn.addEventListener('click', () => {
+selectCoverPicBtn.addEventListener('click', (e) => {
+    e.preventDefault();
     ipcRenderer.send('popup-file-dialog')
+})
+
+let bookCoverPic = document.getElementById('book-cover-pic')
+ipcRenderer.on('book-cover-pic', (event: any, data: any) => {
+    (<HTMLImageElement>bookCoverPic).src = data
 })
