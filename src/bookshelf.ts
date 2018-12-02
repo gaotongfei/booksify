@@ -2,10 +2,8 @@ import {Book, BookModel} from './models/book'
 
 export class Bookshelf {
     selector: string
-    loadPath: string
-    constructor(selector: string, loadPath: string) {
+    constructor(selector: string) {
         this.selector = selector
-        this.loadPath = loadPath
     }
 
     loadBooks() {
@@ -35,9 +33,7 @@ export class Bookshelf {
             return temp
         }
         for (let book of books) {
-            temp += '<div class="book-block">' + 
-                book.name
-            '</div>'
+            temp += `<div class="book-block">${book.name}<img src='file:///Users/gao/Documents/Userpic.png' /> </div>`
         }
         return temp
     }

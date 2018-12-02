@@ -14,7 +14,6 @@ body {
 }
 
 .frameless-container {
-  padding-top: 30px;
   height: 100%;
   width: 100%;
 }
@@ -99,8 +98,10 @@ trix-editor:empty:not(:focus)::before {
   width: 100%;
 }
 .book-block {
-  height: 150px;
-  width: 100px;
+  height: 190px;
+  width: 140px;
+  margin-left: 20px;
+  margin-right: 20px;
   background: #d7d7d7;
   display: inline-block;
 }
@@ -123,4 +124,13 @@ trix-editor:empty:not(:focus)::before {
   font-size: 20px;
   font-weight: 700;
   padding-left: 30px;
+}
+.book-info-window {
+  padding: 20px;
+  height: 550px;
+}
+.book-info-window .book-info {
+  height: 650px;
+}
+.action-buttons {
 }

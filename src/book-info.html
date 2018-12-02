@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World!</title>
+  <link rel="stylesheet" href="./css/photon.min.css">
+  <link rel="stylesheet" href="./css/application.css">
+</head>
+
+<body>
+  <div class="window book-info-window">
+    <form>
+      <div class="book-info">
+        <div class="form-group">
+          <label>Book name</label>
+          <input type="text" class="form-control" placeholder="Harry Potter" id='book-name'>
+        </div>
+        <div class="form-group">
+          <label>What is it about?</label>
+          <textarea class="form-control" rows="5" id='book-description'></textarea>
+        </div>
+        <div class="form-group">
+          <label>Book Cover</label>
+          <div>
+            <img src="../src/images/book-cover.png">
+          </div>
+          <button class="btn btn-default" id='select-cover-pic'>Select Book Cover</button>
+        </div>
+      </div>
+      <div class="form-actions action-buttons">
+        <button type="submit" class="btn btn-large btn-form btn-default" id="close">Close</button>
+        <button type="submit" class="btn btn-large btn-form btn-primary" id="confirm">Confirm</button>
+      </div>
+    </form>
+  </div>
+</body>
+<script>
+  require('../dist/render-book-info.js')
+</script>
+</html>

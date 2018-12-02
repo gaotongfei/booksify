@@ -1,12 +1,10 @@
-const sqlite3 = require('sqlite3').verbose();
-export const db = new sqlite3.cached.Database('/tmp/booksify.sqlite3');
-
-db.serialize(() => {
-    db.run(`
+const db = require('better-sqlite3')('/tmp/booksify.db');
+db.exec(`
         CREATE TABLE IF NOT EXISTS books (
             id INTEGER PRIMARY KEY,
             name TEXT,
             description TEXT,
+            cover_pic TEXT,
             created_at INTEGER,
             updated_at INTEGER
         );
@@ -19,5 +17,4 @@ db.serialize(() => {
             updated_at INTEGER
         )
     `)
-})
 export default db
