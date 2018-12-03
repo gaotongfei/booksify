@@ -20,7 +20,7 @@ export class ChapterModel {
     public static listChapters(bookId: number): Chapter[] {
         const chapters: Chapter[] = []
         const stmt = db.prepare("SELECT * FROM chapters WHERE book_id = ?")
-        const rows = stms.all(bookId)
+        const rows = stmt.all(bookId)
         for (const row of rows) {
             const chapter = new Chapter(row.title, row.content, row.book_id, row.created_at, row.updated_at)
             chapters.push(chapter)

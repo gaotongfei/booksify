@@ -3,10 +3,15 @@ import Store = require("electron-store")
 import * as fs from "fs"
 import * as path from "path"
 import { BookModel } from "./models/book"
+import initMenu from "./menu"
+
+const { requireTaskPool } = require("electron-remote";
+const ChapterModel = requireTaskPool(require.resolve("./models/chapter"))
+
+const store = new Store()
 
 let mainWindow: Electron.BrowserWindow
 let child: Electron.BrowserWindow
-const store = new Store()
 
 function createWindow() {
     // Create the browser window.
@@ -18,8 +23,11 @@ function createWindow() {
         center: true,
     })
 
+    initMenu()
+
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, "../src/index.html"))
+
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
@@ -34,6 +42,7 @@ function createWindow() {
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
         mainWindow = null
+        child = null
     })
 
     ipcMain.on("create-book", (event: any, arg: any) => {
@@ -45,25 +54,25 @@ function createWindow() {
             height: 750,
             center: true,
         })
-        child.loadFile(path.join(__dirname, "../src/book-info.html"))
+        child.loadFile(path.join(__dirname, "../src/browser/book-info/book-info.html"))
         child.once("ready-to-show", () => {
             child.show()
         })
     })
 
-    ipcMain.on("close-book-info-modal", (event: any, data: any) => {
+    ipcMain.on("close-book-info-modal", () => {
         child.close()
     })
 
     ipcMain.on("submit-book-info", (event: any, data: any) => {
         const bookId = BookModel.createBook(data)
         child.close()
-        mainWindow.loadFile(path.join(__dirname, "../src/editor.html"))
+        mainWindow.loadFile(path.join(__dirname, "../src/browser/editor/editor.html"))
         store.set("current-book-id", bookId)
         mainWindow.webContents.send("render-chapters", bookId)
     })
 
-    ipcMain.on("popup-file-dialog", (event: any, data: any) => {
+    ipcMain.on("popup-file-dialog", () => {
         dialog.showOpenDialog({
             properties: ["openFile", "openDirectory"],
             filters: [{ name: "Images", extensions: ["jpg", "png"] }],
@@ -74,6 +83,10 @@ function createWindow() {
                 child.webContents.send("book-cover-pic", imgSource)
             }
         })
+    })
+
+    ipcMain.on("save-chapter", (event: any, data: any) => {
+        ChapterModel.createChapter(data)
     })
 
     ipcMain.on("go-home", () => {

@@ -1,8 +1,8 @@
-import { ipcRenderer } from "electron";
-import { ChapterModel, Chapter } from "./models/chapter";
+import { ipcRenderer } from "electron"
+import { ChapterModel, Chapter } from "../../models/chapter"
 
 // home button
-const homeBtn = document.getElementById("home-btn");
+const homeBtn = document.getElementById("home-btn")
 homeBtn.addEventListener("click", () => {
     ipcRenderer.send("go-home")
 })

@@ -1,5 +1,5 @@
 import { ipcRenderer, remote } from "electron"
-import { Bookshelf } from "./bookshelf"
+import { Bookshelf } from "./models/bookshelf"
 
 ipcRenderer.on("render-books", (event: any, data: any) => {
     const bookshelf = new Bookshelf(".bookshelf")
