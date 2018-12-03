@@ -8,7 +8,7 @@ export class Bookshelf {
 
     public loadBooks() {
         const books = this.fetchBooks()
-        this.renderBooks(books)
+        return this.renderBooks(books)
     }
 
     private fetchBooks(): Book[] {
@@ -18,23 +18,34 @@ export class Bookshelf {
 
     private renderBooks(books: Book[]) {
         const element = document.querySelector(this.selector)
-        element.innerHTML = this.template(books)
+        const bookBlocks = this.template(books)
+        for (const bookBlock of bookBlocks) {
+            element.appendChild(bookBlock)
+        }
+        return bookBlocks
     }
 
     private template(books: Book[]) {
-        let temp = ""
+        const bookBlocks = []
         if (books.length === 0) {
-            temp = `
-            <div class='empty-bookshelf'>
-                <h1>Thanks for using Booksify</h1>
-                There is no book found on local machine.
-            </div>
-            `
-            return temp
+            const divElem = document.createElement("div")
+            divElem.setAttribute("class", "empty-bookshelf")
+            const headerElem = document.createElement("H1")
+            const headerTextElem = document.createTextNode("Thanks for using Booksify")
+            headerElem.appendChild(headerTextElem)
+            divElem.appendChild(headerElem)
+            divElem.appendChild(document.createTextNode("There is no book found on local machine."))
+            bookBlocks.push(divElem)
+        } else {
+            for (const book of books) {
+                const divElem = document.createElement("div")
+                divElem.setAttribute("data-book-id", String(book.id))
+                divElem.setAttribute("class", "book-block")
+                divElem.style.backgroundImage = `url(${book.cover_pic})`
+                bookBlocks.push(divElem)
+            }
         }
-        for (const book of books) {
-            temp += `<div class="book-block">${book.name}<img src='file:///Users/gao/Documents/Userpic.png' /> </div>`
-        }
-        return temp
+
+        return bookBlocks
     }
 }

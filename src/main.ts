@@ -3,9 +3,8 @@ import Store = require("electron-store")
 import * as fs from "fs"
 import * as path from "path"
 import { BookModel } from "./models/book"
-import initMenu from "./menu"
 
-const { requireTaskPool } = require("electron-remote";
+const { requireTaskPool } = require("electron-remote")
 const ChapterModel = requireTaskPool(require.resolve("./models/chapter"))
 
 const store = new Store()
@@ -17,13 +16,11 @@ function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
         backgroundColor: "#ffffff",
-        width: 1000,
-        height: 800,
         title: "Booksify",
         center: true,
     })
+    mainWindow.maximize()
 
-    initMenu()
 
     // and load the index.html of the app.
     mainWindow.loadFile(path.join(__dirname, "../src/index.html"))
@@ -45,7 +42,7 @@ function createWindow() {
         child = null
     })
 
-    ipcMain.on("create-book", (event: any, arg: any) => {
+    ipcMain.on("show-create-book-window", (event: any, arg: any) => {
         child = new BrowserWindow({
             parent: mainWindow,
             modal: true,
@@ -64,12 +61,11 @@ function createWindow() {
         child.close()
     })
 
-    ipcMain.on("submit-book-info", (event: any, data: any) => {
+    ipcMain.on("submit-book-info", (event: any, data: {name: string, description: string, cover_pic: string}) => {
         const bookId = BookModel.createBook(data)
         child.close()
         mainWindow.loadFile(path.join(__dirname, "../src/browser/editor/editor.html"))
         store.set("current-book-id", bookId)
-        mainWindow.webContents.send("render-chapters", bookId)
     })
 
     ipcMain.on("popup-file-dialog", () => {
@@ -91,6 +87,11 @@ function createWindow() {
 
     ipcMain.on("go-home", () => {
         mainWindow.loadFile(path.join(__dirname, "../src/index.html"))
+    })
+
+    ipcMain.on("select-book-from-bookshelf", (event: any, data: any) => {
+        mainWindow.loadFile(path.join(__dirname, "../src/browser/editor/editor.html"))
+        store.set("current-book-id", data.bookId)
     })
 }
 
