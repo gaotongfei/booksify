@@ -41,13 +41,14 @@ export class BookModel {
         return books
     }
 
-    public static createBook(bookData: {name: string, description: string, cover_pic: string}) {
+    public static createBook(bookData: {name: string, description: string, cover_pic: string}): number {
         const currentTime = new Date().getTime()
         const stmt = db.prepare(`
             INSERT INTO books (name, description, cover_pic, created_at, updated_at)
             VALUES (@name, @description, @cover_pic, ?, ?)
             `)
-        stmt.run(currentTime, currentTime, bookData)
+        const result = stmt.run(currentTime, currentTime, bookData)
+        return result.lastInsertRowid
     }
 
 }

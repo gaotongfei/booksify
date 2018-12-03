@@ -9,7 +9,8 @@ closeBtn.addEventListener("click", () => {
 confirmBtn.addEventListener("click", () => {
     const bookName = (document.getElementById("book-name") as HTMLInputElement).value
     const bookDescription = (document.getElementById("book-description") as HTMLInputElement).value
-    ipcRenderer.send("submit-book-info", {name: bookName, description: bookDescription})
+    const imageSource = (document.getElementById("book-cover-pic") as HTMLInputElement).src
+    ipcRenderer.send("submit-book-info", {name: bookName, description: bookDescription, cover_pic: imageSource})
 })
 
 
