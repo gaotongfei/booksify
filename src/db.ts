@@ -1,4 +1,4 @@
-const db = require('better-sqlite3')('/tmp/booksify.db');
+const db = require("better-sqlite3")("/tmp/booksify.db")
 db.exec(`
         CREATE TABLE IF NOT EXISTS books (
             id INTEGER PRIMARY KEY,
