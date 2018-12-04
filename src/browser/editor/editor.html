@@ -31,11 +31,15 @@
                   <button class="btn btn-large btn-positive" id="new-chapter-btn">New Chapter</button>
                 </div>
               </div>
-              <input placeholder="Type chapter's title here" class="form-control borderless-input" id='chapter-input'>
+              <form>
+
+              <input placeholder="Type chapter's title here" class="form-control borderless-input" id='chapter-input' name="chapter-title">
+              <input id="trix-editor-input" name="chapter-content" type="hidden">
 
               <div class="editor">
-                <trix-editor placeholder='Type here'></trix-editor>
+                <trix-editor input="trix-editor-input" placeholder='Type here'></trix-editor>
               </div>
+              </form>
 
 
             </div>
