@@ -40,3 +40,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 })
 
+const uploadAttachment = (attachment: any) => {
+    const file = attachment.file
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+        const imageData = reader.result
+        const extension = attachment.getExtension()
+
+        ipcRenderer.send("save-image", { imageData, extension })
+    }
+
+    reader.onerror = (e) => {
+        console.log(e)
+    }
+
+    ipcRenderer.on("image-uploaded", (event: any, data: any) => {
+        attachment.setAttributes({
+            url: data.imageUrl,
+            href: data.imageUrl,
+        })
+    })
+}
+
+document.addEventListener("trix-attachment-add", (event: any) => {
+    const attachment = event.attachment
+    if (attachment.file) {
+        return uploadAttachment(attachment)
+    }
+})

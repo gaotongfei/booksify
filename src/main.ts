@@ -3,6 +3,7 @@ import Store = require("electron-store")
 import * as fs from "fs"
 import * as path from "path"
 import { BookModel } from "./models/book"
+import { ImageStore } from "./image-store"
 
 const { requireTaskPool } = require("electron-remote")
 const ChapterModel = requireTaskPool(require.resolve("./models/chapter"))
@@ -92,6 +93,11 @@ function createWindow() {
     ipcMain.on("select-book-from-bookshelf", (event: any, data: any) => {
         mainWindow.loadFile(path.join(__dirname, "../src/browser/editor/editor.html"))
         store.set("current-book-id", data.bookId)
+    })
+
+    ipcMain.on("save-image", (event: any, data: any) => {
+        const imageStore = new ImageStore(mainWindow, data.imageData, data.extension)
+        imageStore.saveToDisk()
     })
 }
 

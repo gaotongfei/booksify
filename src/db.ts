@@ -1,4 +1,16 @@
-const db = require("better-sqlite3")("/tmp/booksify.db")
+import * as path from "path"
+import * as fs from "fs"
+const pf = require("platform-folders")
+
+const dataHomePath = pf.getDataHome()
+
+const appDir = path.join(dataHomePath, "booksify")
+if (!fs.existsSync(appDir)) {
+    fs.mkdirSync(appDir)
+}
+
+const db = require("better-sqlite3")(path.join(appDir, "data.db"))
+
 db.exec(`
         CREATE TABLE IF NOT EXISTS books (
             id INTEGER PRIMARY KEY,
