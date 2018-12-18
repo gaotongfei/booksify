@@ -3,10 +3,11 @@ import Store = require("electron-store")
 import * as fs from "fs"
 import * as path from "path"
 import { BookModel } from "./models/book"
+import { ChapterModel } from "./models/chapter"
 import { ImageStore } from "./image-store"
 
-const { requireTaskPool } = require("electron-remote")
-const ChapterModel = requireTaskPool(require.resolve("./models/chapter"))
+// const { requireTaskPool } = require("electron-remote")
+// const ChapterModel = requireTaskPool(require.resolve("./models/chapter"))
 
 const store = new Store()
 
@@ -41,6 +42,7 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null
         child = null
+        store.clear()
     })
 
     ipcMain.on("show-create-book-window", (event: any, arg: any) => {
@@ -82,8 +84,14 @@ function createWindow() {
         })
     })
 
-    ipcMain.on("save-chapter", (event: any, data: any) => {
-        ChapterModel.createChapter(data)
+    ipcMain.on("create-chapter", (event: any, data: any) => {
+        const rowInfo = ChapterModel.createChapter(data)
+        const chapterId = rowInfo.lastInsertRowid
+        store.set("current-chapter-id", chapterId)
+    })
+
+    ipcMain.on("update-chapter", (event: any, data: any) => {
+        ChapterModel.updateChapter(data)
     })
 
     ipcMain.on("go-home", () => {
@@ -111,6 +119,7 @@ app.on("window-all-closed", () => {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== "darwin") {
+        store.clear()
         app.quit()
     }
 })

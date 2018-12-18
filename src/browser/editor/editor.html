@@ -31,15 +31,13 @@
                   <button class="btn btn-large btn-positive" id="new-chapter-btn">New Chapter</button>
                 </div>
               </div>
-              <form>
 
-              <input placeholder="Type chapter's title here" class="form-control borderless-input" id='chapter-input' name="chapter-title">
+              <input placeholder="Title" class="form-control borderless-input" id='chapter-input' name="chapter-title">
               <input id="trix-editor-input" name="chapter-content" type="hidden">
 
               <div class="editor">
-                <trix-editor input="trix-editor-input" placeholder='Type here'></trix-editor>
+                <trix-editor input="trix-editor-input" placeholder='Content'></trix-editor>
               </div>
-              </form>
 
 
             </div>
@@ -50,6 +48,6 @@
   </div>
 </body>
 <script>
-  require('../../../dist/browser/editor/render-editor')
+  require('../../../dist/browser/editor/editor-render')
 </script>
 </html>
