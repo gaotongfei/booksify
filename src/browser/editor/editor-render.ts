@@ -8,6 +8,7 @@ class EditorRender {
         this.loadChapters()
         this.bindDragDropAttachment()
         this.bindSaveBtn()
+        this.initActiveChapter()
     }
 
 
@@ -59,6 +60,30 @@ class EditorRender {
             }
         })
     }
+
+    public initActiveChapter() {
+        document.addEventListener("DOMContentLoaded", () => {
+            let currentChapterId = store.get("current-chapter-id")
+            if (currentChapterId !== undefined) {
+                this.markChapterActive(currentChapterId)
+            } else {
+                const chapterElements = document.getElementsByClassName("chapter")
+                if (chapterElements.length > 0) {
+                    currentChapterId = chapterElements[0].getAttribute("data-chapter-id")
+                    this.markChapterActive(currentChapterId)
+                }
+            }
+        })
+
+    }
+
+    private markChapterActive(chapterId: string) {
+        const chapter = document.querySelector("div[data-chapter-id='" + chapterId + "']")
+        if (!chapter.classList.contains("active")) {
+            chapter.classList.add("active")
+        }
+    }
+
     private uploadAttachment(attachment: any) {
         const file = attachment.file
         const reader = new FileReader()
@@ -87,8 +112,23 @@ class EditorRender {
         if (chapters.length > 0)  {
             for (const chapter of chapters) {
                 const chapterElement = document.createElement("div")
-                chapterElement.setAttribute("class", "chapter-title")
-                chapterElement.appendChild(document.createTextNode(chapter.title))
+                chapterElement.setAttribute("class", "chapter")
+                chapterElement.setAttribute("data-chapter-id", chapter.id.toString())
+
+                const chapterTitleElement = document.createElement("div")
+                chapterTitleElement.setAttribute("class", "chapter-title")
+                chapterTitleElement.appendChild(document.createTextNode(chapter.title))
+
+                const chapterInfoElement = document.createElement("div")
+                chapterInfoElement.setAttribute("class", "chapter-info")
+
+                const updatedTime = new Date(chapter.updated_at).toISOString()
+                chapterInfoElement.appendChild(document.createTextNode(updatedTime.toString()))
+
+                chapterElement.appendChild(chapterTitleElement)
+                chapterElement.appendChild(chapterInfoElement)
+
+                // chapterElement.appendChild(document.createTextNode())
                 chaptersElement.push(chapterElement)
             }
         } else {

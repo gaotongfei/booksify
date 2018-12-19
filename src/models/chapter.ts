@@ -1,13 +1,15 @@
 import db from "../db"
 
 export class Chapter {
+    public id: number
     public title: string
     public content: string
     public book_id: number
     public created_at: number
     public updated_at: number
 
-    constructor(title: string, content: string, book_id: number, created_at: number, updated_at: number) {
+    constructor(id: number, title: string, content: string, book_id: number, created_at: number, updated_at: number) {
+        this.id = id
         this.title = title
         this.content = content
         this.book_id = book_id
@@ -22,7 +24,7 @@ export class ChapterModel {
         const stmt = db.prepare("SELECT * FROM chapters WHERE book_id = ?")
         const rows = stmt.all(bookId)
         for (const row of rows) {
-            const chapter = new Chapter(row.title, row.content, row.book_id, row.created_at, row.updated_at)
+            const chapter = new Chapter(row.id, row.title, row.content, row.book_id, row.created_at, row.updated_at)
             chapters.push(chapter)
         }
         return chapters
