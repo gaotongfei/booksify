@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain } from "electron"
+import { app, BrowserWindow, dialog, ipcMain, Menu } from "electron"
 import Store = require("electron-store")
 import * as fs from "fs"
 import * as path from "path"
@@ -15,6 +15,7 @@ let mainWindow: Electron.BrowserWindow
 let child: Electron.BrowserWindow
 
 function createWindow() {
+
     // Create the browser window.
     mainWindow = new BrowserWindow({
         backgroundColor: "#ffffff",
@@ -94,6 +95,13 @@ function createWindow() {
         ChapterModel.updateChapter(data)
     })
 
+    ipcMain.on("get-chapter", (event: any, data: any) => {
+        const chapterId: string = data.chapterId
+        const chapter = ChapterModel.getChapter(parseInt(chapterId, 10))
+        mainWindow.webContents.send("get-chapter-data", chapter)
+    })
+
+
     ipcMain.on("go-home", () => {
         mainWindow.loadFile(path.join(__dirname, "../src/index.html"))
     })
@@ -109,10 +117,19 @@ function createWindow() {
     })
 }
 
+const menuTemplate: object[] = []
+
+const onAppReady = () => {
+    createWindow()
+
+    const menu = Menu.buildFromTemplate(menuTemplate)
+    Menu.setApplicationMenu(menu)
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow)
+app.on("ready", onAppReady)
 
 // Quit when all windows are closed.
 app.on("window-all-closed", () => {

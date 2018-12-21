@@ -8,9 +8,10 @@ class EditorRender {
         this.loadChapters()
         this.bindDragDropAttachment()
         this.bindSaveBtn()
+        this.bindSaveShortCut()
         this.initActiveChapter()
+        this.setChapterData()
     }
-
 
     public bindHomeBtn() {
         const homeBtn = document.getElementById("home-btn")
@@ -31,19 +32,31 @@ class EditorRender {
     public bindSaveBtn() {
         const saveBtn = document.getElementById("save-btn")
         saveBtn.addEventListener("click", () => {
-            const title = (document.getElementById("chapter-input") as HTMLInputElement).value
-            const content = (document.getElementById("trix-editor-input") as HTMLInputElement).value
-            const bookId = store.get("current-book-id")
-            const chapterId = store.get("current-chapter-id")
+            this.saveChapter()
+        })
+    }
 
-            if (chapterId !== undefined) {
-                const chapterData = { title, content, chapterId }
-                ipcRenderer.send("update-chapter", chapterData )
-            } else {
-                const chapterData = { title, content, book_id: bookId }
-                ipcRenderer.send("create-chapter", chapterData)
+    public bindSaveShortCut() {
+        window.addEventListener("keydown", (e) => {
+            if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode === 83) {
+                this.saveChapter()
             }
         })
+    }
+
+    private saveChapter() {
+        const title = (document.getElementById("chapter-input") as HTMLInputElement).value
+        const content = (document.getElementById("trix-editor-input") as HTMLInputElement).value
+        const bookId = store.get("current-book-id")
+        const chapterId = store.get("current-chapter-id")
+
+        if (chapterId !== undefined) {
+            const chapterData = { title, content, chapterId }
+            ipcRenderer.send("update-chapter", chapterData )
+        } else {
+            const chapterData = { title, content, book_id: bookId }
+            ipcRenderer.send("create-chapter", chapterData)
+        }
     }
 
     public loadChapters() {
@@ -76,12 +89,23 @@ class EditorRender {
         })
 
     }
+    public setChapterData() {
+        const title = document.getElementById("chapter-input")
+        const body: any = document.getElementsByTagName("trix-editor")[0]
+        ipcRenderer.on("get-chapter-data", (event: any, data: any) => {
+            (title as HTMLInputElement).value = data.title
+            body.editor.loadHTML(data.content)
+        })
+    }
 
     private markChapterActive(chapterId: string) {
+        store.set("current-chapter-id", chapterId)
         const chapter = document.querySelector("div[data-chapter-id='" + chapterId + "']")
         if (!chapter.classList.contains("active")) {
             chapter.classList.add("active")
         }
+
+        ipcRenderer.send("get-chapter", { chapterId })
     }
 
     private uploadAttachment(attachment: any) {

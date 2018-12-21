@@ -55,4 +55,13 @@ export class ChapterModel {
         `)
         stmt.run(chapterId)
     }
+    public static getChapter(chapterId: number) {
+        const stmt = db.prepare(`
+            SELECT * FROM chapters where id = ?
+        `)
+        const chapter = stmt.all(chapterId)[0]
+        return new Chapter(chapter.id, chapter.title, chapter.content,
+                           chapter.book_id, chapter.created_at, chapter.updated_at)
+    }
+
 }
